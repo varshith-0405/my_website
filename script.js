@@ -1,4 +1,5 @@
 let userId;
+
 function showLogin() {
   fetch("https://jsonplaceholder.typicode.com/users/")
     .then((res) => res.json())
@@ -8,18 +9,16 @@ function showLogin() {
 
 function showPosts(id) {
   let str = "";
-  //console.log(`https://jsonplaceholder.typicode.com/posts/userId=${id}`)
   fetch(`https://jsonplaceholder.typicode.com/posts/?userId=${id}`)
     .then((res) => res.json())
     .then((data) => {
-      data &&
-        data.map((value) => {
-          str += `<div>
+      data.map((value) => {
+        str += `<div>
         <b>${value.title}</b>
         <p>${value.body}</p>
         </div>`;
-        });
-      content.innerHTML = str;
+      });
+      document.getElementById("content").innerHTML = str;
     })
     .catch((err) => console.log(err));
 }
@@ -32,27 +31,59 @@ function showProfile(id) {
       <b>${data.name}</b>
       <p>${data.email}</p>
       </div>`;
-      content.innerHTML = str;
+      document.getElementById("content").innerHTML = str;
     })
     .catch((err) => console.log(err));
 }
 
+function showAlbums(id) {
+  let str = "";
+  fetch(`https://jsonplaceholder.typicode.com/albums?userId=${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      data.map((album) => {
+        str += `<div>
+        <b>${album.title}</b>
+        </div>`;
+      });
+      document.getElementById("content").innerHTML = str;
+    })
+    .catch((err) => console.log(err));
+}
+
+function showtodo(id) {
+  let str = "";
+  fetch(`https://jsonplaceholder.typicode.com/todos?userId=${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      data.map((album) => {
+        str += `<div>
+        <b>${album.title}</b>
+        </div>`;
+      });
+      document.getElementById("content").innerHTML = str;
+    })
+    .catch((err) => console.log(err));
+}
+
+
 function showHome() {
-  userId = selUser.value;
+  userId = document.getElementById("selUser").value;
   let str = `
    <div class='container-fluid'>
      <div class='row'>
-      <div class='d-flex justify-content-between bg-primary text-light'>
+      <div class='d-flex justify-content-between bg-primary text-light p-3'>
        <div>My Social Media</div>
-       <div id='username'>${userId}</div>
+       <div id='username'>User ID: ${userId}</div>
       </div>
      </div>
      <div class='row'>
       <div class='d-flex'>
        <div class='p-2'>
          <p onclick='showPosts(${userId})'>Home</p>
-         <p>Album</p>
-          <p onclick='showProfile(${userId})'>Profile</p>
+         <p onclick='showAlbums(${userId})'>Album</p>
+         <p onclick='showProfile(${userId})'>Profile</p>
+         <p onclick='showtodo(${userId})'>ToDo</p>
          <p onclick='showLogin()'>Logout</p>
        </div>
        <div class='p-2' id='content'></div>
@@ -60,12 +91,12 @@ function showHome() {
      </div>
      <div class='row'>
       <div class='bg-primary text-light p-5'>
-       <p>@Copyright 2025. All rights reserved.</p>
+       <p>&copy; 2025. All rights reserved.</p>
       </div>
      </div>
    </div>
   `;
-  root.innerHTML = str;
+  document.getElementById("root").innerHTML = str;
   showPosts(userId);
 }
 
@@ -82,6 +113,8 @@ function displayUsers(data) {
   data.map((value) => {
     str += `<option value=${value.id}>${value.name}</option>`;
   });
-  str += `</select><p><button class='form-control m-3 btn btn-primary' onclick='showHome()'>Log In</button></p></div></div>`;
-  root.innerHTML = str;
+  str += `</select>
+  <p><button class='form-control m-3 btn btn-primary' onclick='showHome()'>Log In</button></p>
+  </div></div>`;
+  document.getElementById("root").innerHTML = str;
 }
